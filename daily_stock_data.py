@@ -44,7 +44,7 @@ except:
 if failure_flag:
     file_str = ""
     if len(bad_files) > 0:
-        file_str = f"\n\nFailed in following files:\n{'\n'.join(bad_files)}"
+        file_str = "\n\nFailed in following files:\n" + '\n'.join(bad_files)
     
     msg = f"""daily_stock_data.py: Failed in load daily stocks for [{', '.join(bad_sources)}] on [{date.today()}]
     {file_str}"""
