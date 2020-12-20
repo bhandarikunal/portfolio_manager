@@ -78,5 +78,8 @@ if not failure_flags[us_source]:
     print(f"daily_stock_data_us.py: Calling stock analyzer for US stocks")
     
     select_tickers = get_ticker_recommendations(max_recommend=50)
-    send_email(message="List of recommended possibly value stocks:",subject="US Top Value Stocks",
-               df=select_tickers)        
+    
+    for criteria, tickers in select_tickers.items():
+        send_email(message=f"List of recommended possibly value stocks based on {criteria}:",
+                   subject=f"US Top Value Stocks {criteria}",
+                   df=tickers)
