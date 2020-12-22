@@ -28,11 +28,11 @@ bad_files = []
 #Load US stocks' meta information
 source = us_meta_source
 try:
-    load_ticker_info(source=source)
+    load_ticker_info_nasdaq(source=source)
 except:
     print(f"daily_stock_data_us.py: Error in load_ticker_info for US market using source [{source}]")
-    bad_sources.append(source)
-    failure_flags[source] = True
+    bad_sources.append("meta_" + source)
+    failure_flags["meta_" + source] = True
 
 
 #Load US stocks' EOD ticker prices

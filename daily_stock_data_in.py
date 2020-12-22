@@ -20,6 +20,16 @@ failure_flags = {}
 bad_sources = []
 bad_files = []
 
+
+#Load IN stocks' meta information
+source = in_source
+try:
+    load_ticker_info_bse(source=source)
+except:
+    print(f"daily_stock_data_in.py: Error in load_ticker_info for IN market using source [{source}]")
+    bad_sources.append("meta_" + source)
+    failure_flags["meta_" + source] = True
+
 source = in_source
 failure_flags[source] = False
 try:
