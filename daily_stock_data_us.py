@@ -74,12 +74,25 @@ else:
               subject = f"Success in daily US stock data on [{date.today()}]")
 
 #Analyze and generate stock recommendations
-if not failure_flags[us_source]:
-    print(f"daily_stock_data_us.py: Calling stock analyzer for US stocks")
-    
-    select_tickers = get_ticker_recommendations(max_recommend=50)
-    
+print(f"daily_stock_data_us.py: Calling stock analyzer for US stocks")
+
+failed_to_recommend = False
+try:
+    #select_tickers = get_ticker_recommendations(ma=(200,100), max_recommend=50)
+    select_tickers = get_ticker_recommendations_2(moving_averages=(200,100),
+                                                  max_recommend=50,
+                                                  create_ma_table=True
+                                                 )
+except:
+    failed_to_recommend = True
+    print(f"daily_stock_data_us.py: Failed in getting stock recommendations")
+    #raise
+
+if not failed_to_recommend:
     for criteria, tickers in select_tickers.items():
         send_email(message=f"List of recommended possibly value stocks based on {criteria}:",
                    subject=f"US Top Value Stocks {criteria}",
                    df=tickers)
+else:
+    send_email(message="", subject=f"Failed in US Top Value Stocks")
+    raise
