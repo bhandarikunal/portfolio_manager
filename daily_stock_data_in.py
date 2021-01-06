@@ -21,15 +21,33 @@ bad_sources = []
 bad_files = []
 
 
+#Load IN stocks' holidays information
+source = in_source
+meta_info = "holi_"
+source = meta_info + source
+failure_flags[source] = False
+try:
+    load_holidays_bse()
+except:
+    print(f"daily_stock_data_in.py: Error in load_holidays_bse for IN market using source [{source}]")
+    bad_sources.append(source)
+    failure_flags[source] = True
+
+
 #Load IN stocks' meta information
 source = in_source
+meta_info = "meta_"
+source = meta_info + source
+failure_flags[source] = False
 try:
-    load_ticker_info_bse(source=source)
+    load_ticker_info_bse()
 except:
-    print(f"daily_stock_data_in.py: Error in load_ticker_info for IN market using source [{source}]")
-    bad_sources.append("meta_" + source)
-    failure_flags["meta_" + source] = True
+    print(f"daily_stock_data_in.py: Error in load_ticker_info_bse for IN market using source [{source}]")
+    bad_sources.append(source)
+    failure_flags[source] = True
 
+
+#Load IN stocks' daily prices
 source = in_source
 failure_flags[source] = False
 try:
@@ -48,6 +66,8 @@ except:
     bad_sources.append(source)
     failure_flags[source] = True
 
+
+#Send email notification about success / failure
 if np.any(list(failure_flags.values())):
     file_str = ""
     if len(bad_files) > 0:
