@@ -115,13 +115,6 @@ except:
     send_email(message="", subject=f"Error creating moving averages")
     raise
 
-moving_averages=(200,100)
-try:
-    create_moving_averages(moving_averages = moving_averages)
-except:
-    send_email(message="", subject=f"Error creating moving averages")
-    raise
-
 try:
     load_top_tickers()
 except:
