@@ -145,3 +145,4 @@ for fn in [1,2]:
         send_email(message="", subject=f"Failed in US Top Value Stocks")
         raise
 
+archive_top_tickers()
