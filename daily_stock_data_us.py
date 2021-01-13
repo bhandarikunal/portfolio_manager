@@ -112,14 +112,24 @@ moving_averages=(200,100)
 try:
     create_moving_averages(moving_averages = moving_averages)
 except:
+    print(f"daily_stock_data_us.py: Error in create moving averages")
     send_email(message="", subject=f"Error creating moving averages")
     raise
+
 
 try:
     load_top_tickers()
 except:
+    print(f"daily_stock_data_us.py: Error loading top tickers")
     send_email(message="", subject=f"Error loading top tickers")
-    raise
+
+
+try:
+    load_future_earnings_yahoo()
+except:
+    print(f"daily_stock_data_us.py: Error loading earnings calendar")
+    send_email(message="", subject=f"Error loading earnings calendar")
+
 
 for fn in [1,2]:
     failed_to_recommend = False
