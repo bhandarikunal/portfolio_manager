@@ -136,11 +136,11 @@ for fn in [1,2]:
     try:
         if fn == 1:
             select_tickers = get_ticker_recommendations_2(moving_averages=moving_averages,
-                                                          max_recommend=50,
+                                                          max_recommend=100,
                                                           create_ma_table=False
                                                          )
         else:
-            select_tickers = get_ticker_recommendations(ma=moving_averages, max_recommend=50)
+            select_tickers = get_ticker_recommendations(ma=moving_averages, max_recommend=100)
     except:
         failed_to_recommend = True
         print(f"daily_stock_data_us.py: Failed in getting stock recommendations")
