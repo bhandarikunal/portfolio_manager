@@ -109,19 +109,20 @@ else:
 print(f"daily_stock_data_us.py: Calling stock analyzer for US stocks")
 
 moving_averages=(200,100)
+ma_success = True
 try:
     create_moving_averages(moving_averages = moving_averages)
 except:
     print(f"daily_stock_data_us.py: Error in create moving averages")
     send_email(message="", subject=f"Error creating moving averages")
-    raise
+    ma_success = False
 
-
-try:
-    load_top_tickers()
-except:
-    print(f"daily_stock_data_us.py: Error loading top tickers")
-    send_email(message="", subject=f"Error loading top tickers")
+if ma_success:
+    try:
+        load_top_tickers()
+    except:
+        print(f"daily_stock_data_us.py: Error loading top tickers")
+        send_email(message="", subject=f"Error loading top tickers")
 
 
 try:
@@ -135,11 +136,14 @@ for fn in [1,2]:
     failed_to_recommend = False
     try:
         if fn == 1:
+            if not ma_success:
+                print(f"daily_stock_data_us.py: Skipping stock recommendations 2 due to failed create MA")
+                continue
             select_tickers = get_ticker_recommendations_2(moving_averages=moving_averages,
                                                           max_recommend=100,
                                                           create_ma_table=False
                                                          )
-        else:
+        elif fn == 2:
             select_tickers = get_ticker_recommendations(ma=moving_averages, max_recommend=100)
     except:
         failed_to_recommend = True
