@@ -132,7 +132,7 @@ except:
     send_email(message="", subject=f"Error loading earnings calendar")
 
 
-for fn in [1,2]:
+for fn in [2,1]:
     failed_to_recommend = False
     try:
         if fn == 1:
