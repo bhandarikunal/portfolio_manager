@@ -73,9 +73,9 @@ source = us_source
 failure_flags[source] = False
 try:
     if source == "eoddata":
-        bad_files_us = load_daily_data_eoddata()
+        bad_files_us = call_and_monitor(load_daily_data_eoddata)
     elif source == "stooq":
-        bad_files_us = load_daily_data_stooq()
+        bad_files_us = call_and_monitor(load_daily_data_stooq)
     else:
         print(f"daily_stock_data_us.py: Invalid source for US market data [{source}]")
         failure_flags[source] = True
