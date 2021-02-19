@@ -28,8 +28,8 @@ source = meta_info + source
 failure_flags[source] = False
 try:
     load_holidays_bse()
-except:
-    print(f"daily_stock_data_in.py: Error in load_holidays_bse for IN market using source [{source}]")
+except Exception as e:
+    print(f"daily_stock_data_in.py: Error [{e.args[0]}] in load_holidays_bse for IN market using source [{source}]")
     bad_sources.append(source)
     failure_flags[source] = True
 
@@ -41,8 +41,8 @@ source = meta_info + source
 failure_flags[source] = False
 try:
     load_ticker_info_bse()
-except:
-    print(f"daily_stock_data_in.py: Error in load_ticker_info_bse for IN market using source [{source}]")
+except Exception as e:
+    print(f"daily_stock_data_in.py: Error [{e.args[0]}] in load_ticker_info_bse for IN market using source [{source}]")
     bad_sources.append(source)
     failure_flags[source] = True
 
@@ -61,8 +61,8 @@ try:
         bad_sources.append(source)
         bad_files = bad_files + bad_files_in
         failure_flags[source] = True
-except:
-    print(f"daily_stock_data_in.py: Error in load_daily_data for IN market using source [{source}]")
+except Exception as e:
+    print(f"daily_stock_data_in.py: Error [{e.args[0]}] in load_daily_data for IN market using source [{source}]")
     bad_sources.append(source)
     failure_flags[source] = True
 

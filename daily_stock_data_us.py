@@ -28,15 +28,15 @@ bad_sources = []
 bad_files = []
 
 
-#Load IN stocks' holidays information
+#Load US stocks' holidays information
 source = us_holiday_source
 meta_info = "holi_"
 source = meta_info + source
 failure_flags[source] = False
 try:
     load_holidays_nyse()
-except:
-    print(f"daily_stock_data_us.py: Error in load_holidays_nyse for US market using source [{source}]")
+except Exception as e:
+    print(f"daily_stock_data_us.py: Error [{e.args[0]}] in load_holidays_nyse for US market using source [{source}]")
     bad_sources.append(source)
     failure_flags[source] = True
 
@@ -48,8 +48,8 @@ source = meta_info + source
 failure_flags[source] = False
 try:
     load_ticker_info_nasdaq()
-except:
-    print(f"daily_stock_data_us.py: Error in load_ticker_info_nasdaq for US market using source [{source}]")
+except Exception as e:
+    print(f"daily_stock_data_us.py: Error [{e.args[0]}] in load_ticker_info_nasdaq for US market using source [{source}]")
     bad_sources.append(source)
     failure_flags[source] = True
 
@@ -61,8 +61,8 @@ source = meta_info + source
 failure_flags[source] = False
 try:
     load_ticker_is_etf_nasdaq()
-except:
-    print(f"daily_stock_data_us.py: Error in load_ticker_is_etf_nasdaq for US market using source [{source}]")
+except Exception as e:
+    print(f"daily_stock_data_us.py: Error [{e.args[0]}] in load_ticker_is_etf_nasdaq for US market using source [{source}]")
     bad_sources.append(source)
     failure_flags[source] = True
 
@@ -84,8 +84,8 @@ try:
         bad_sources.append(source)
         bad_files = bad_files + bad_files_us
         failure_flags[source] = True
-except:
-    print(f"daily_stock_data_us.py: Error in load_daily_data for US market using source [{source}]")
+except Exception as e:
+    print(f"daily_stock_data_us.py: Error [{e.args[0]}] in load_daily_data for US market using source [{source}]")
     bad_sources.append(source)
     failure_flags[source] = True
 
@@ -112,23 +112,23 @@ moving_averages=(200,100)
 ma_success = True
 try:
     create_moving_averages(moving_averages = moving_averages)
-except:
-    print(f"daily_stock_data_us.py: Error in create moving averages")
+except Exception as e:
+    print(f"daily_stock_data_us.py: Error [{e.args[0]}] in create moving averages")
     send_email(message="", subject=f"Error creating moving averages")
     ma_success = False
 
 if ma_success:
     try:
         load_top_tickers()
-    except:
-        print(f"daily_stock_data_us.py: Error loading top tickers")
+    except Exception as e:
+        print(f"daily_stock_data_us.py: Error [{e.args[0]}] loading top tickers")
         send_email(message="", subject=f"Error loading top tickers")
 
 
 try:
     load_future_earnings_yahoo()
-except:
-    print(f"daily_stock_data_us.py: Error loading earnings calendar")
+except Exception as e:
+    print(f"daily_stock_data_us.py: Error [{e.args[0]}] loading earnings calendar")
     send_email(message="", subject=f"Error loading earnings calendar")
 
 
@@ -145,10 +145,9 @@ for fn in [2,1]:
                                                          )
         elif fn == 2:
             select_tickers = get_ticker_recommendations(ma=moving_averages, max_recommend=100)
-    except:
+    except Exception as e:
+        print(f"daily_stock_data_us.py: Error [{e.args[0]}] in getting stock recommendations")
         failed_to_recommend = True
-        print(f"daily_stock_data_us.py: Failed in getting stock recommendations")
-        #raise
 
     if not failed_to_recommend:
         for criteria, tickers in select_tickers.items():
@@ -157,6 +156,5 @@ for fn in [2,1]:
                        df=tickers)
     else:
         send_email(message="", subject=f"Failed in US Top Value Stocks")
-        raise
 
 archive_top_tickers()
