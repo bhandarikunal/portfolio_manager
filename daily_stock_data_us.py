@@ -108,6 +108,7 @@ else:
 #Analyze and generate stock recommendations
 print(f"daily_stock_data_us.py: Calling stock analyzer for US stocks")
 
+#moving_averages=(1400,700,350,200,100)
 moving_averages=(200,100)
 ma_success = True
 try:
@@ -132,8 +133,11 @@ except Exception as e:
     send_email(message="", subject=f"Error loading earnings calendar")
 
 
-for fn in [2,1]:
+for fn in [3]:
     failed_to_recommend = False
+    
+    fn_desc = "proper_ma" if fn == 1 else "basic_ma" if fn == 2 else "big_cap_ma"
+    
     try:
         if fn == 1:
             if not ma_success:
@@ -145,6 +149,16 @@ for fn in [2,1]:
                                                          )
         elif fn == 2:
             select_tickers = get_ticker_recommendations(ma=moving_averages, max_recommend=100)
+        elif fn == 3:
+            select_tickers = get_ticker_recommendations_2(moving_averages=moving_averages,
+                                                          max_recommend=100,
+                                                          create_ma_table=False,
+                                                          min_price=10,
+                                                          avg_vol=1e6,
+                                                          mcap_mil=20000,
+                                                          big_cap_mcap_mil=200000,
+                                                          p_upside=0.20
+                                                         )            
     except Exception as e:
         print(f"daily_stock_data_us.py: Error [{e.args[0]}] in getting stock recommendations")
         failed_to_recommend = True
@@ -152,7 +166,7 @@ for fn in [2,1]:
     if not failed_to_recommend:
         for criteria, tickers in select_tickers.items():
             send_email(message=f"List of recommended possibly value stocks based on {criteria}:",
-                       subject=f"US Top Value Stocks {criteria}",
+                       subject=f"US Top Value Stocks {criteria} {fn_desc}",
                        df=tickers)
     else:
         send_email(message="", subject=f"Failed in US Top Value Stocks")
