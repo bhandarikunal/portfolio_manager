@@ -5,6 +5,7 @@
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0]))))
+from common_py.functions import *
 from common_py.stooq.functions import *
 
 from datetime import date
