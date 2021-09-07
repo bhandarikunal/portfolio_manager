@@ -8,9 +8,13 @@ sys.path.insert(
     0,
     os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
 )
+from common_py.nyse.functions import *
+from common_py.nasdaq.functions import *
+from common_py.yahoo.functions import *
 from common_py.stooq.functions import *
-from common_py.stock_analyzer import *
 from common_py.eoddata.functions import *
+from common_py.stock_functions import *
+from common_py.stock_analyzer import *
 
 from datetime import date
 
