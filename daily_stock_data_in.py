@@ -8,6 +8,7 @@ sys.path.insert(
     0,
     os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0])))
 )
+from common_py.stock_functions import *
 from common_py.bse.functions import *
 
 from datetime import date
@@ -32,7 +33,7 @@ failure_flags[source] = False
 try:
     load_holidays_bse()
 except Exception as e:
-    logger.warn("Error loading BSE holidays for IN market " \
+    logger.warning("Error loading BSE holidays for IN market " \
                 f"using source [{source}]", exc_info=True)
     bad_sources.append(source)
     failure_flags[source] = True
@@ -46,7 +47,7 @@ failure_flags[source] = False
 try:
     load_ticker_info_bse()
 except Exception as e:
-    logger.warn("Error loading BSE ticker meta information", exc_info=True)
+    logger.warning("Error loading BSE ticker meta information", exc_info=True)
     bad_sources.append(source)
     failure_flags[source] = True
 
@@ -58,7 +59,7 @@ try:
     if source == "bse":
         bad_files_in = load_daily_data_bse()
     else:
-        logger.warn("Error - Invalid source for daily stock price data " \
+        logger.warning("Error - Invalid source for daily stock price data " \
                     f"for IN market [{source}]", exc_info=True)
         failure_flags[source] = True
     
@@ -67,7 +68,7 @@ try:
         bad_files = bad_files + bad_files_in
         failure_flags[source] = True
 except Exception as e:
-    logger.warn("Error loading IN market stock price data " \
+    logger.warning("Error loading IN market stock price data " \
                 f"using source [{source}]", exc_info=True)
     bad_sources.append(source)
     failure_flags[source] = True

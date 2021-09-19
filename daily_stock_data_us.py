@@ -45,7 +45,7 @@ failure_flags[source] = False
 try:
     load_holidays_nyse()
 except Exception as e:
-    logger.warn("Error - Unable to load holiday information "
+    logger.warning("Error - Unable to load holiday information "
                 + "for US market using source "
                 + f"[{source}]", exc_info = True)
     bad_sources.append(source)
@@ -60,7 +60,7 @@ failure_flags[source] = False
 try:
     load_ticker_info_nasdaq()
 except Exception as e:
-    logger.warn("Error loading meta information about tickers "
+    logger.warning("Error loading meta information about tickers "
                 + f"for US market using source [{source}]", exc_info = True)
     bad_sources.append(source)
     failure_flags[source] = True
@@ -74,7 +74,7 @@ failure_flags[source] = False
 try:
     load_ticker_is_etf_nasdaq()
 except Exception as e:
-    logger.warn("Error loading ticker to ETF map using source "
+    logger.warning("Error loading ticker to ETF map using source "
                 + f"[{source}]", exc_info = True)
     bad_sources.append(source)
     failure_flags[source] = True
@@ -90,7 +90,7 @@ try:
     elif source == "stooq":
         bad_files_us = call_and_monitor(load_daily_data_stooq)
     else:
-        logger.warn(f"Error - Invalid source for US market data [{source}]",
+        logger.warning(f"Error - Invalid source for US market data [{source}]",
                     exc_info = True)
         failure_flags[source] = True
     
@@ -99,7 +99,7 @@ try:
         bad_files = bad_files + bad_files_us
         failure_flags[source] = True
 except Exception as e:
-    logger.warn("Error loading new stock price data "
+    logger.warning("Error loading new stock price data "
                 + f"[{source}]", exc_info = True)
     bad_sources.append(source)
     failure_flags[source] = True
@@ -132,7 +132,7 @@ ma_success = True
 try:
     create_moving_averages(moving_averages = moving_averages)
 except Exception as e:
-    logger.warn("Error creating moving averages", exc_info = True)
+    logger.warning("Error creating moving averages", exc_info = True)
     send_email(message="", subject="Error creating moving averages")
     ma_success = False
 
@@ -140,17 +140,15 @@ if ma_success:
     try:
         load_top_tickers_zacks()
     except Exception as e:
-        logger.warn("Error loading top tickers based on ETFs",
+        logger.warning("Error loading top tickers based on ETFs",
                     exc_info = True)
         send_email(message="", subject="Error loading top ETF tickers")
-
 
 try:
     load_future_earnings_yahoo()
 except Exception as e:
-    logger.warn("Error loading earnings calendar", exc_info = True)
+    logger.warning("Error loading earnings calendar", exc_info = True)
     send_email(message="", subject="Error loading earnings calendar")
-
 
 for fn in [3]:
     failed_to_recommend = False
@@ -161,7 +159,7 @@ for fn in [3]:
     try:
         if fn == 1:
             if not ma_success:
-                logger.warn("daily_stock_data_us.py: Skipping stock "
+                logger.warning("daily_stock_data_us.py: Skipping stock "
                             + "recommendations 2 due to failed create MA")
                 continue
             select_tickers = get_ticker_recommendations_2(
@@ -185,7 +183,7 @@ for fn in [3]:
                 p_upside=0.20
             )            
     except Exception as e:
-        logger.warn("Error getting stock recommendations", exc_info = True)
+        logger.warning("Error getting stock recommendations", exc_info = True)
         failed_to_recommend = True
 
     if not failed_to_recommend:
