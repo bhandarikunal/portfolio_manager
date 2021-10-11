@@ -12,6 +12,7 @@ sys.path.insert(
 from common_py.nyse.functions import *
 from common_py.nasdaq.functions import *
 from common_py.yahoo.functions import *
+from common_py.cboe.functions import *
 from common_py.stooq.functions import *
 from common_py.eoddata.functions import *
 from common_py.zacks.functions import *
@@ -86,9 +87,9 @@ source = us_source
 failure_flags[source] = False
 try:
     if source == "eoddata":
-        bad_files_us = call_and_monitor(load_daily_data_eoddata)
+        bad_files_us = load_daily_data_eoddata()
     elif source == "stooq":
-        bad_files_us = call_and_monitor(load_daily_data_stooq)
+        bad_files_us = load_daily_data_stooq()
     else:
         logger.warning(f"Error - Invalid source for US market data [{source}]",
                     exc_info = True)
@@ -144,12 +145,6 @@ if ma_success:
                     exc_info = True)
         send_email(message="", subject="Error loading top ETF tickers")
 
-try:
-    load_future_earnings_yahoo()
-except Exception as e:
-    logger.warning("Error loading earnings calendar", exc_info = True)
-    send_email(message="", subject="Error loading earnings calendar")
-
 for fn in [3]:
     failed_to_recommend = False
     
@@ -194,5 +189,18 @@ for fn in [3]:
                        df=tickers)
     else:
         send_email(message="", subject="Failed in US Top Value Stocks")
+
+try:
+    load_future_earnings_yahoo()
+except Exception as e:
+    logger.warning("Error loading earnings calendar", exc_info = True)
+    send_email(message="", subject="Error loading earnings calendar")
+
+try:
+    load_vix_prices()
+except Exception as e:
+    msg = "Error loading vix prices"
+    logger.warning(msg, exc_info = True)
+    send_email(message=msg, subject=msg)
 
 archive_top_tickers()
