@@ -10,12 +10,13 @@ from common_py.sec.functions import *
 
 ###################### Main program ############################
 
-print(f"download_sec_archive_files.py: Calling download_sec_archive_files")
+print(f"download_sec_filings.py: Calling download_sec_archive_files")
 
 try:
-    download_missing_sec_archive_files()
+    download_sec_filings()
 except Exception as e:
-    logger.exception(f"download_sec_archive_files.py: Error",
+    logger.exception(f"download_sec_filings.py: Error",
                      exc_info=True)
-    send_email(message="", subject=f"Error download_sec_archive_files")
-send_email(message="", subject=f"Success in download_sec_archive_files")
+    send_email(message="", subject=f"Error download_sec_filings")
+    raise
+send_email(message="", subject=f"Success in download_sec_filings")
