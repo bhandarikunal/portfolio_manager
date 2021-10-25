@@ -203,4 +203,11 @@ except Exception as e:
     logger.warning(msg, exc_info = True)
     send_email(message=msg, subject=msg)
 
+try:
+    load_put_call_ratio_data(start_version=3)
+except Exception as e:
+    msg = "Error loading put/call ratios"
+    logger.warning(msg, exc_info = True)
+    send_email(message=msg, subject=msg)
+
 archive_top_tickers()
